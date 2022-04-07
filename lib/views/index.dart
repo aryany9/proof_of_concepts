@@ -13,7 +13,17 @@ class FeedsHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Feeds Home"),
+        title: Obx(
+          () => Text(controller.data.value?.title ?? "Feeds Home"),
+        ),
+        actions: [
+          // Refresh Button
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => controller.fetchFeeds(),
+            tooltip: 'Refresh',
+          ),
+        ],
       ),
       body: Obx(
         () => controller.isLoading.value
@@ -22,18 +32,10 @@ class FeedsHome extends StatelessWidget {
               )
             : ListView.builder(
                 itemBuilder: (context, index) {
+                  // calling CardWidget to load in ListView
                   return CardWidget(
                     row: controller.data.value!.rows![index],
                   );
-                  // ListTile(
-                  //   title: controller.data.value?.rows?[index].title != null
-                  //       ? Text(controller.data.value!.rows![index].title!)
-                  //       : null,
-                  //   subtitle: controller.data.value?.rows?[index].description !=
-                  //           null
-                  //       ? Text(controller.data.value!.rows![index].description!)
-                  //       : null,
-                  // );
                 },
                 itemCount: controller.data.value?.rows?.length,
               ),
